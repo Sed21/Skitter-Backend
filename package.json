@@ -6,7 +6,7 @@
     "start": "ts-node src/app/index.ts",
     "build": "del /s /q build & npm run lint & tsc --project ./",
     "lint": "eslint -c ./.eslintrc.json --fix ./src/**/*.ts",
-    "test": "jest --coverage --rootDir tests/ --testTimeout 60 --maxConcurrency 8"
+    "test": "jest -c tests/config/jest.config.js --coverage --rootDir tests/ --testTimeout 60 --maxConcurrency 8"
   },
   "keywords": [],
   "author": "Sed21",
