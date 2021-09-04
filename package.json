@@ -2,12 +2,11 @@
   "name": "skitter_backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "ts-node src/app/index.ts",
-    "build": "del /s /q build & tsc --project ./",
+    "build": "del /s /q build & npm run lint & tsc --project ./",
     "lint": "eslint -c ./.eslintrc.json --fix ./src/**/*.ts",
-    "test": "jest --coverage --rootDir src/tests/ --testTimeout 60 --maxConcurrency 8"
+    "test": "jest --coverage --rootDir tests/ --testTimeout 60 --maxConcurrency 8"
   },
   "keywords": [],
   "author": "Sed21",
