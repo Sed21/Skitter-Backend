@@ -3,7 +3,5 @@
 node_modules/
 build/
 
-database
-
 #ignore test coverage
 tests/coverage

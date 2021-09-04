@@ -19,7 +19,7 @@
     "no-undef": ["error"],
     "no-var": ["error"],
     "object-curly-spacing": ["error", "always"],
-    "quotes": ["error", "double", { "allowTemplateLiterals": true }],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "semi": ["error", "always"],
     "spaced-comment": ["warn"],
     "no-prototype-builtins": ["off"],
