@@ -1,7 +1,9 @@
-import express from 'express';
+import * as http from 'http';
+import { weave } from './weave';
+import { Server } from 'http';
 
-const server: express.Application = express();
+const server: Server = http.createServer(weave);
 
-server.listen(8080, () => {
-  console.log("Server is listing")
-})
+server.listen(8080, 'localhost', () => {
+  console.log('Server is running');
+});
