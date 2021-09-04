@@ -2,10 +2,8 @@
 .vscode/
 node_modules/
 build/
-tmp/
-temp/
+
 database
 
-src/config/.env
-
-src/tests/coverage
+#ignore test coverage
+tests/coverage
