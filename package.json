@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "ts-node src/app/index.ts",
     "build": "del /s /q build & tsc --project ./",
     "lint": "eslint -c ./.eslintrc.json --fix ./src/**/*.ts",
     "test": "jest --coverage --rootDir src/tests/ --testTimeout 60 --maxConcurrency 8"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sed21",
   "license": "ISC",
   "dependencies": {
     "@types/morgan": "^1.9.3",
@@ -25,7 +25,6 @@
     "typeorm": "0.2.34"
   },
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^26.0.24",
     "@types/node": "^8.10.66",
@@ -40,7 +39,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-standard": "^5.0.0",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
