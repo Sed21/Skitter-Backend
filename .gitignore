@@ -5,3 +5,5 @@ build/
 
 #ignore test coverage
 tests/coverage
+
+src/config/.env
