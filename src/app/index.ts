@@ -1,15 +1,22 @@
 import * as http from 'http';
-import { configs, weave } from './weave';
+import { weave } from './weave';
 import { Server } from 'http';
+import * as service from '../services';
 
 const server: Server = http.createServer(weave);
 
-setTimeout(() => {
-  if (process.env.SKITTER_READY) {
-    server.listen(configs.server.port, configs.server.host, () => {
+service
+  .initServices(service.initEnv, service.initDatabase)
+  .then(() => {
+    const config = service.readEnv().server;
+    // @ts-ignore
+    server.listen(config.port, config.host, () => {
       console.log(
-        `Server is up and running as ${configs.server.host} on port ${configs.server.port}.`
+        `Server is running as ${config.host} on port ${config.port}.`
       );
     });
-  }
-}, 100);
+  })
+  .catch(() => {
+    console.error('Services couldn\'t initialize correctly. Shutting down ...');
+    process.exit(101);
+  });
