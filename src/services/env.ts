@@ -1,4 +1,9 @@
-import { Number ,Boolean } from '../types';
+import { Boolean, Number } from '../types';
+import { envObj } from '../types';
+import { SecureGen } from '../utils';
+
+// Token duration in seconds
+export const tokenDuration: Number = 24 * 60 * 60;
 
 export function initEnv(): Boolean {
   const env = process.env;
@@ -8,45 +13,41 @@ export function initEnv(): Boolean {
   }
   if (
     !(
-      env.TYPEORM_CONNECTION &&
-      env.TYPEORM_HOST &&
-      env.TYPEORM_USERNAME &&
-      env.TYPEORM_PASSWORD &&
-      env.TYPEORM_DATABASE &&
-      env.TYPEORM_PORT &&
-      env.TYPEORM_SYNCHRONIZE &&
-      env.TYPEORM_ENTITIES
+      env.POSTGRES_HOST &&
+      env.POSTGRES_SCHEMA_NAME &&
+      env.POSTGRES_USERNAME &&
+      env.POSTGRES_PASSWORD &&
+      env.POSTGRES_DATABASE &&
+      env.POSTGRES_PORT
     )
   ) {
-    console.log('Database services variables are not defined.');
+    console.log('Env services variables are not defined.');
     return false;
+  }
+  if (!env.JWT_SECRET) {
+    console.log('JWT secret not found. Secure random secret has been set.');
+    process.env.JWT_SECRET = SecureGen.string(256); // TODO: Maybe it should be stored into database
   }
   return true;
 }
 
-type envObject = {
-  database: {},
-  server: {
-    host: String,
-    port: Number
-  }
-}
-
-export function readEnv(): envObject {
+export function readEnv(): envObj {
   const env = process.env;
   return {
     database: {
-      type: env.TYPEORM_CONNECTION,
-      host: env.TYPEORM_HOST,
-      port: env.TYPEORM_PORT,
-      username: env.TYPEORM_USERNAME,
-      password: env.TYPEORM_PASSWORD,
-      database: env.TYPEORM_DATABASE,
-      synchronize: env.TYPEORM_SYNCHRONIZE,
+      host: env.POSTGRES_HOST,
+      port: env.POSTGRES_PORT,
+      user: env.POSTGRES_USERNAME,
+      password: env.POSTGRES_PASSWORD,
+      database: env.POSTGRES_DATABASE,
+      schemaName: env.POSTGRES_SCHEMA_NAME
     },
     server: {
       host: String(env.SKITTER_HOST),
       port: +String(env.SKITTER_PORT)
-    }
+    },
+    jwtSecret: String(env.JWT_SECRET),
+    startWithReset: !!env.START_WITH_RESET,
+    sqlDocPath: String(env.POSTGRES_INIT_DOC)
   };
 }
