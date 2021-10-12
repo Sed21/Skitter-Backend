@@ -14,4 +14,10 @@ export class Failure {
         'Endpoint doesn\'t exists. Please, read API docs for more information.'
     });
   }
+
+  static internalServerError(res: Response, message?: String): Response {
+    return res.status(500).json({
+      message:  `Server couldn't process request.${message ? ` ${message}.` : ''}.`
+    });
+  }
 }
