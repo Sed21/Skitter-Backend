@@ -8,10 +8,11 @@ import {
   AllRoles,
   UserDB,
   Boolean,
-  QueryResultShort
+  QueryResultShort, SignUpResponse
 } from '../types';
 import { hashPassword, SecureGen } from '../utils';
 import { Database, tokenDuration } from '../services';
+import { JWT } from '../controller/auth/jwt';
 
 export class User {
   id: UUID;
@@ -94,7 +95,7 @@ export class User {
     return foundData ? foundData[0] : undefined;
   }
 
-  public async insert(): Promise<User> {
+  public async save(): Promise<User> {
     const checkUsername = await User.getOne(this.username);
     if(checkUsername) return Promise.reject('User already exists');
 
@@ -110,11 +111,44 @@ export class User {
       this.token_gen_date,
       this.token_expr_date
     ]);
-    if(result.rowCount === 0) return Promise.reject('Couldn\'t save user in database.');
+    if(result.rowCount === 0) return Promise.reject('Couldn\'t save user in database');
     return User.toObject(result)[0] || Promise.reject('Something went wrong');
   }
 
-  static toObject(queryResult: QueryResultShort): User[] {
+  public async createSession(): Promise<void> {
+    if(!this.valid) return Promise.reject('Valid user expected');
+    this.token = SecureGen.token();
+    this.token_gen_date = new Date(Date.now());
+    this.token_expr_date= new Date(Date.now() + tokenDuration);
+
+    const query = `UPDATE "${Database.schemaName}".users SET token=$2, token_gen_date=$3, token_expr_date=$4 WHERE id=$1 RETURNING true;`;
+    const result = await Database.query(query, [this.id, this.token, this.token_gen_date, this.token_expr_date]);
+    if(result.rowCount === 0) return Promise.reject('Couldn\'t save token in database');
+  }
+
+  public static async removeSession(token: Token): Promise<void> {
+    const query = `UPDATE "${Database.schemaName}".users SET token=$2, token_gen_date=$3, token_expr_date=$4 WHERE token=$1 RETURNING true;`;
+    const result = await Database.query(query, [token, '*' , 'NOW()', 'NOW()']);
+    if(result.rowCount === 0) return Promise.reject('Token does not exist');
+  }
+
+  public expose(): SignUpResponse {
+    return {
+      id: this.id,
+      username: this.username,
+      role: this.role,
+      token: JWT.sign({
+        username: this.username,
+        role: this.role,
+        token: this.token,
+        token_expr_date: this.token_expr_date
+      }),
+      token_gen_date: this.token_gen_date,
+      token_expr_date: this.token_expr_date
+    };
+  }
+
+  public static toObject(queryResult: QueryResultShort): User[] {
     return queryResult.rows.map(e => {
       const userDB: UserDB = e as UserDB;
       const user: User = new User();
@@ -123,7 +157,6 @@ export class User {
       user.username = userDB.username;
       user.password = userDB.password;
       user.role = userDB.role;
-      user.signup_date = userDB.registration_date;
       user.token_gen_date = userDB.token_gen_date;
       user.token_expr_date = userDB.token_expr_date;
       user.token = userDB.token;
