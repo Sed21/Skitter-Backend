@@ -11,8 +11,7 @@ import {
   QueryResultShort, SignUpResponse
 } from '../types';
 import { hashPassword, SecureGen } from '../utils';
-import { Database, tokenDuration } from '../services';
-import { JWT } from '../controller/auth/jwt';
+import { Database, tokenDuration, JWT } from '../services';
 
 export class User {
   id: UUID;
