@@ -1,5 +1,5 @@
-import { Token, String, JWTPayload } from '../../types';
-import { readEnv } from '../../services';
+import { Token, String, JWTPayload } from '../types';
+import { readEnv } from './env';
 import * as jwt from 'jsonwebtoken';
 
 export class JWT {
