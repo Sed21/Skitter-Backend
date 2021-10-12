@@ -17,3 +17,4 @@ CREATE TABLE "skitter".users (
 
 CREATE UNIQUE INDEX username_idx ON "skitter".users (username);
 CREATE UNIQUE INDEX token_idx ON "skitter".users (token);
+CREATE UNIQUE INDEX id_idx ON "skitter".users (id);
