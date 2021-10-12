@@ -1,9 +1,10 @@
 import { String } from './std';
 import { UUID } from './uuid';
+import { User } from '../entity';
 
 export type Username = String;
 export type Password = String;
-export type Token = Array[256] | String;
+export type Token = String;
 export type Id = UUID;
 
 export type AvailableRoles = 'Creator' | 'Listener';
@@ -14,6 +15,9 @@ type UserAuthBase = {
   password: Password; // base64 encoded string
 };
 
+export interface SignOutBody {
+  token: Token
+}
 export interface SignInBody extends UserAuthBase {}
 export interface SignUpBody extends UserAuthBase {
   role: AvailableRoles
@@ -22,7 +26,6 @@ export interface SignUpBody extends UserAuthBase {
 export type SignUpResponse = {
   id: UUID;
   username: Username;
-  registration_date: Date;
   role: AvailableRoles;
   token: Token;
   token_gen_date: Date;
@@ -31,4 +34,11 @@ export type SignUpResponse = {
 
 export type UserDB = SignUpResponse & {
   password: Password
+}
+
+export type JWTPayload = {
+  username: Username,
+  role: AllRoles,
+  token: Token,
+  token_expr_date: Date;
 }
