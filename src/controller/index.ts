@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 
 export * from './auth/signup';
+export * from './auth/signin';
+export * from './auth/signout';
 
 export * from './success';
 export * from './failure';

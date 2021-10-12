@@ -3,4 +3,6 @@ import * as Controller from '../controller';
 
 export const authRouter = Router();
 
-authRouter.post('/signup', Controller.signUpHandler);
+authRouter.put('/signup', Controller.signUpHandler);
+authRouter.post('/signin', Controller.signInHandler);
+authRouter.delete('/signout', Controller.signOutHandler);
