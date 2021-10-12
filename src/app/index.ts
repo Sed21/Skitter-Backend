@@ -6,10 +6,9 @@ import * as service from '../services';
 const server: Server = http.createServer(weave);
 
 service
-  .initServices(service.initEnv, service.initDatabase)
+  .initServices(service.initEnv, service.Database.init)
   .then(() => {
     const config = service.readEnv().server;
-    // @ts-ignore
     server.listen(config.port, config.host, () => {
       console.log(
         `Server is running as ${config.host} on port ${config.port}.`

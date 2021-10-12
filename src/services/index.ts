@@ -3,6 +3,7 @@ import { Boolean } from '../types';
 export * from './database';
 export * from './env';
 export * from './cors';
+export * from './jwt';
 
 type initFunc = (() => Promise<Boolean>) | (() => Boolean)
 
