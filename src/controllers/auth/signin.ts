@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { SignInBody } from '../../types';
-import { User } from '../../entity';
+import { User } from '../../entities';
 import { Failure } from '../failure';
 import { compareHash } from '../../utils';
 import { Success } from '../success';

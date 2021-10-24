@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { SignOutBody } from '../../types';
 import { Failure } from '../failure';
-import { User } from '../../entity';
+import { User } from '../../entities';
 import { Success } from '../success';
-import { JWT } from './jwt';
+import { JWT } from '../../services';
 
 export async function signOutHandler(req: Request, res: Response): Promise<Response> {
   const body: SignOutBody = req.body;
