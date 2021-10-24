@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as Controller from '../controller';
-import { Failure } from '../controller';
+import * as Controller from '../controllers';
+import { Failure } from '../controllers';
 import { authRouter } from './auth';
 
 export const Routes = Router();
