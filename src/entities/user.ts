@@ -18,7 +18,7 @@ export class User {
   username: Username;
   password: Password;
   signup_date: Date;
-  role: AvailableRoles;
+  role: AllRoles;
   token: Token;
   token_gen_date: Date;
   token_expr_date: Date;

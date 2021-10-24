@@ -4,7 +4,15 @@ import { String } from '../types';
 export class Failure {
   static badRequest(res: Response, message?: String): Response {
     return res.status(400).json({
-      message: `Valid provided information is required.${message ? ` ${message}.` : ''} Please try again.`
+      message: `Valid provided information is required.${
+        message ? ` ${message}.` : ''
+      } Please try again.`
+    });
+  }
+
+  static notAuthorized(res: Response): Response {
+    return res.status(401).json({
+      message: 'Higher role is mandatory for using this endpoint.'
     });
   }
 
@@ -17,7 +25,9 @@ export class Failure {
 
   static internalServerError(res: Response, message?: String): Response {
     return res.status(500).json({
-      message:  `Server couldn't process request.${message ? ` ${message}.` : ''}.`
+      message: `Server couldn't process request.${
+        message ? ` ${message}.` : ''
+      }.`
     });
   }
 }

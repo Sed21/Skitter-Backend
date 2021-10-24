@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Failure } from '../failure';
-import { User } from '../../entity';
+import { User } from '../../entities';
 import { Success } from '../success';
 import { SignUpBody } from '../../types';
 import { Validator } from '../../utils';
