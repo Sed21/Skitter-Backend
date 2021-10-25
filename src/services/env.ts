@@ -7,7 +7,7 @@ export const tokenDuration: Number = 24 * 60 * 60;
 
 export function initEnv(): Boolean {
   const env = process.env;
-  if (!(env.SKITTER_HOST && env.SKITTER_PORT)) {
+  if (!(env.SKITTER_HOST && env.SKITTER_PORT && env.SAVE_PATH)) {
     console.log('Mandatory server services variables are not defined.');
     return false;
   }
@@ -47,7 +47,8 @@ export function readEnv(): envObj {
       port: +String(env.SKITTER_PORT)
     },
     jwtSecret: String(env.JWT_SECRET),
-    startWithReset: !!env.START_WITH_RESET,
-    sqlDocPath: String(env.POSTGRES_INIT_DOC)
+    startWithReset: Boolean(env.START_WITH_RESET),
+    sqlDocPath: String(env.POSTGRES_INIT_DOC),
+    savePath: String(env.SAVE_PATH)
   };
 }
