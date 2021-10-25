@@ -4,9 +4,10 @@ export type envObj = {
   database: {},
   server: {
     host: String,
-    port: Number
+    port: Number,
   }
   jwtSecret: String
   startWithReset: Boolean,
-  sqlDocPath: String
+  sqlDocPath: String,
+  savePath: String
 }

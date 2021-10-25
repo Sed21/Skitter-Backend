@@ -1,6 +1,5 @@
 import { String } from './std';
 import { UUID } from './uuid';
-import { User } from '../entity';
 
 export type Username = String;
 export type Password = String;
@@ -26,7 +25,7 @@ export interface SignUpBody extends UserAuthBase {
 export type SignUpResponse = {
   id: UUID;
   username: Username;
-  role: AvailableRoles;
+  role: AllRoles;
   token: Token;
   token_gen_date: Date;
   token_expr_date: Date;
