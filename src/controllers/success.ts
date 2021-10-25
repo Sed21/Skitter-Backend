@@ -16,4 +16,12 @@ export class Success {
       return res.sendStatus(201);
     }
   }
+
+  static NoContent(res: Response, body?: {}): Response {
+    if (body) {
+      return res.status(204).json(body);
+    } else {
+      return res.sendStatus(204);
+    }
+  }
 }
