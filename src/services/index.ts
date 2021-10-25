@@ -4,6 +4,7 @@ export * from './database';
 export * from './env';
 export * from './cors';
 export * from './jwt';
+export * from './upload';
 
 type initFunc = (() => Promise<Boolean>) | (() => Boolean)
 
