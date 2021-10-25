@@ -4,6 +4,11 @@ export * from './auth/signup';
 export * from './auth/signin';
 export * from './auth/signout';
 
+export * from './content/view';
+export * from './content/upload';
+export * from './content/delete';
+export * from './content/audio';
+
 export * from './success';
 export * from './failure';
 
