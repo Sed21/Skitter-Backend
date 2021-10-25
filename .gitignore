@@ -2,6 +2,8 @@
 .vscode/
 node_modules/
 build/
+recordings
+tmp
 
 #ignore test coverage
 tests/coverage
