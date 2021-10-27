@@ -23,20 +23,24 @@ export class Content {
     this.mime_type = mimetype;
   }
   
-  public static async getMany(contentId?: UUID[] | UUID, creatorId?: UUID, bookTitle?: String, bookAuthor?: String): Promise<ExportedContent[]> {
-    const filters = {
-      contentId: contentId,
-      creatorId: creatorId,
-      bookTitle: bookTitle,
-      bookAuthor: bookAuthor
-    };
-
+  public static async getMany(creatorId?: UUID, bookTitle?: String, bookAuthor?: String): Promise<ExportedContent[]> {
     let query = `SELECT content_id, book_title, book_author, review, description, upload_date, creator_id, username FROM "${Database.schemaName}".content INNER JOIN ${Database.schemaName}.users ON (creator_id = users.id) `;
-    if(Object.values(filters).every(_ => !_)) {
-      const response = await Database.query(query);
-      return Content.toExportedObject(response);
+    let args = Array();
+    let argN: Number= 1;
+    if(creatorId){
+      query = `${query} WHERE creator_id=$${argN++} `;
+      args.push(creatorId);
     }
-    return [];
+    if(bookTitle){
+      query = `${query} ${creatorId ? ` AND book_title=$${argN++} ` : ` WHERE book_title=$${argN++} `}`;
+      args.push(bookTitle);
+    }
+    if(bookAuthor){
+      query = `${query} ${creatorId || bookTitle ? ` AND book_author=$${argN++} ` : ` WHERE book_author=$${argN++} `}`;
+      args.push(bookAuthor);
+    }
+    const response = await Database.query(query, args.length > 0 ? args : undefined);
+    return Content.toExportedObject(response);
   }
 
 
@@ -56,8 +60,10 @@ export class Content {
   }
 
   public static async delete(token: Token, contentId: UUID): Promise<Boolean> {
-    const query = `DELETE FROM "${Database.schemaName}".content USING "${Database.schemaName}".users WHERE content_id = $1 AND token = $2 RETURNING true;`;
+    const query = `DELETE FROM "${Database.schemaName}".content USING "${Database.schemaName}".users WHERE content_id = $1 AND (SELECT (token = $2 OR (SELECT role FROM "${Database.schemaName}".users WHERE token = $2)='Admin')) RETURNING true;`;
+    console.log(query);
     const response = await Database.query(query, [contentId, token]);
+    console.log(response);
     return response.rowCount !== 0;
   }
 

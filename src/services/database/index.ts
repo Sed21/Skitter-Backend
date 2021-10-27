@@ -3,6 +3,7 @@ import { Pool, PoolConfig, QueryResult } from 'pg';
 import { String, Boolean, QueryResultShort } from '../../types';
 import { readFileSync } from 'fs';
 import { User } from '../../entities';
+import * as fsExtra from 'fs-extra';
 
 export class Database {
   public static schemaName: String = 'skitter';
@@ -26,6 +27,9 @@ export class Database {
           await Database.query('DROP SCHEMA IF EXISTS skitter CASCADE; DROP TYPE IF EXISTS ROLES;');
           console.log('Read and create schema from SQL doc file.');
           await Database.query(Database.readSqlDoc());
+
+          console.log('Clean content directory.');
+          fsExtra.emptyDirSync(readEnv().savePath);
 
           console.log('Create admin user');
           const user = new User('admin', 'admin', 'Creator');

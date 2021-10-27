@@ -9,11 +9,11 @@ import { readEnv } from '../../services';
 import { validate as validateUUID } from 'uuid';
 
 export async function deleteHandler(req: Request, res: Response): Promise<Response> {
-  const token = TokenBearer(req);
+  const token = await TokenBearer(req);
   const contentId: DeleteInfo = req.body;
   if(!validateUUID(contentId.content_id)) return Failure.badRequest(res, 'Invalid token provided');
   try {
-    if (await Content.delete(await token, contentId.content_id)) {
+    if (await Content.delete(token, contentId.content_id)) {
       fs.unlink(`${readEnv().savePath}/${contentId.content_id}.mp3`, () => {});
     } else return Failure.badRequest(res, 'User is not authorized to delete this content');
     return Success.NoContent(res, {
