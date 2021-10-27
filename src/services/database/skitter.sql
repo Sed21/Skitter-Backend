@@ -30,9 +30,9 @@ CREATE TABLE "skitter".content (
     creator_id uuid
 );
 
-CREATE UNIQUE INDEX content_idx ON "skitter".content (content_id);
-CREATE UNIQUE INDEX book_title_idx ON "skitter".content (b);
-CREATE UNIQUE INDEX id_idx ON "skitter".users (id);
+-- CREATE UNIQUE INDEX content_idx ON "skitter".content (content_id);
+-- CREATE UNIQUE INDEX book_title_idx ON "skitter".content (book_title);
+-- CREATE UNIQUE INDEX book_author_idx ON "skitter".content (book_author);
 
 -- CREATE TABLE "skitter".reviews (
 --     review_id uuid PRIMARY KEY,
