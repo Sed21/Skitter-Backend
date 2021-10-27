@@ -2,20 +2,19 @@ import { Request, Response } from 'express';
 import { TokenBearer } from '../../utils/token';
 import { Failure } from '../failure';
 import { Content } from '../../entities/content';
-import { DeleteInfo } from '../../types';
 import { Success } from '../success';
 import * as fs from 'fs';
 import { readEnv } from '../../services';
 import { validate as validateUUID } from 'uuid';
 
 export async function deleteHandler(req: Request, res: Response): Promise<Response> {
-  const token = await TokenBearer(req);
-  const contentId: DeleteInfo = req.body;
-  if(!validateUUID(contentId.content_id)) return Failure.badRequest(res, 'Invalid token provided');
+  const contentId = req.params.id;
+  if(!contentId || !validateUUID(contentId)) return Failure.badRequest(res, 'Invalid token provided');
   try {
-    if (await Content.delete(token, contentId.content_id)) {
-      fs.unlink(`${readEnv().savePath}/${contentId.content_id}.mp3`, () => {});
-    } else return Failure.badRequest(res, 'User is not authorized to delete this content');
+    const token = await TokenBearer(req);
+    if (await Content.delete(token, contentId)) {
+      fs.unlink(`${readEnv().savePath}/${contentId}.mp3`, () => {});
+    } else return Failure.badRequest(res, 'Content with specified id does not exists');
     return Success.NoContent(res, {
       message: 'Content delete successfully.'
     });
