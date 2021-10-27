@@ -7,14 +7,9 @@ export type ContentInfo = {
   description: String
 }
 
-export type DeleteInfo = {
-  content_id: UUID
-}
-
 export type ViewOptions = {
   book_author: String,
   book_title: String,
-  ids: UUID[],
   creator_id: UUID,
   limit: Number
 }
