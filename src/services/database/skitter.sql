@@ -34,20 +34,15 @@ CREATE TABLE "skitter".content (
 -- CREATE UNIQUE INDEX book_title_idx ON "skitter".content (book_title);
 -- CREATE UNIQUE INDEX book_author_idx ON "skitter".content (book_author);
 
--- CREATE TABLE "skitter".reviews (
---     review_id uuid PRIMARY KEY,
---     review_grade float default 0.0 NOT NULL,
---     CONSTRAINT fk_review_user
---         FOREIGN KEY (review_id)
---            REFERENCES users(id)
---            ON DELETE NO ACTION
---
--- );
+CREATE TABLE "skitter".reviews (
+    review_id uuid PRIMARY KEY,
+    review_mark float default 0.0 NOT NULL,
+    review_date timestamptz NOT NULL DEFAULT NOW(),
+    content_id uuid NOT NULL,
+    user_id uuid NOT NULL
+);
+
 --
 -- CREATE TABLE "skitter".favorites (
---
--- );
---
--- CREATE TABLE "skitter".admin (
 --
 -- );
