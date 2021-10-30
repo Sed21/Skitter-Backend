@@ -42,7 +42,10 @@ CREATE TABLE "skitter".reviews (
     user_id uuid NOT NULL
 );
 
---
--- CREATE TABLE "skitter".favorites (
---
--- );
+
+CREATE TABLE "skitter".favorites (
+    favorite_id uuid PRIMARY KEY,
+    content_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    add_date timestamptz NOT NULL DEFAULT NOW()
+);
