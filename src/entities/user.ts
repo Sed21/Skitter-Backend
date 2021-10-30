@@ -8,10 +8,12 @@ import {
   AllRoles,
   UserDB,
   Boolean,
-  QueryResultShort, SignUpResponse
+  QueryResultShort, SignUpResponse, UserData
 } from '../types';
 import { hashPassword, SecureGen } from '../utils';
-import { Database, tokenDuration, JWT } from '../services';
+import { Database, tokenDuration, JWT, readEnv } from '../services';
+import { Content } from './content';
+import fs from 'fs';
 
 export class User {
   id: UUID;
@@ -95,10 +97,11 @@ export class User {
   }
 
   public async save(): Promise<User> {
+    if(!this.valid) return Promise.reject('User is not valid.');
+
     const checkUsername = await User.getOne(this.username);
     if(checkUsername) return Promise.reject('User already exists');
 
-    if(!this.valid) return Promise.reject('User is not valid.');
     const query = `INSERT INTO "${Database.schemaName}".users VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`;
     const result = await Database.query(query, [
       this.id,
@@ -145,6 +148,41 @@ export class User {
       token_gen_date: this.token_gen_date,
       token_expr_date: this.token_expr_date
     };
+  }
+
+  public static async view(user_id: UUID): Promise<UserData> {
+    const query = `SELECT id, username, role, profile_description, signup_date FROM "${Database.schemaName}".users WHERE id=$1 AND role!='Admin';`;
+    const response = await Database.query(query, [user_id]);
+    if(response.rowCount === 0) return Promise.reject('User does not exists');
+    return response.rows[0] as UserData;
+  }
+
+  public static async delete(token: Token): Promise<Boolean> {
+    const [userId] = await Promise.all([User.getOne(undefined, undefined, token)]);
+    if(!userId) return false;
+
+    const userContent = await Content.getMany(userId.id);
+
+    const queryUser = `DELETE FROM "${Database.schemaName}".users WHERE token=$1 RETURNING true;`;
+    const queryContent = `DELETE FROM "${Database.schemaName}".content WHERE creator_id=$1 RETURNING true;`;
+    const queryReview = `DELETE FROM "${Database.schemaName}".reviews WHERE user_id=$1 RETURNING true;`;
+    const queryFavorite = `DELETE FROM "${Database.schemaName}".favorites WHERE user_id=$1 RETURNING true;`;
+
+    const responseUser = await Database.query(queryUser, [token]);
+    await Database.query(queryContent, [userId.id]);
+    await Database.query(queryReview, [userId.id]);
+    await Database.query(queryFavorite, [userId.id]);
+
+    userContent.forEach(_ => {
+      fs.unlink(`${readEnv().savePath}/${_.content_id}.mp3`, () => {});
+    });
+    return responseUser.rowCount !== 0;
+  }
+
+  public static async changeDescription(token: Token, description: String): Promise<Boolean> {
+    const query = `UPDATE "${Database.schemaName}".users SET profile_description = $1 WHERE token = $2 RETURNING true`;
+    const response = await Database.query(query, [description, token]);
+    return response.rowCount !== 0;
   }
 
   public static toObject(queryResult: QueryResultShort): User[] {
