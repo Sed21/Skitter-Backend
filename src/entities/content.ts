@@ -61,9 +61,7 @@ export class Content {
 
   public static async delete(token: Token, contentId: UUID): Promise<Boolean> {
     const query = `DELETE FROM "${Database.schemaName}".content USING "${Database.schemaName}".users WHERE content_id = $1 AND (SELECT (token = $2 OR (SELECT role FROM "${Database.schemaName}".users WHERE token = $2)='Admin')) RETURNING true;`;
-    console.log(query);
     const response = await Database.query(query, [contentId, token]);
-    console.log(response);
     return response.rowCount !== 0;
   }
 

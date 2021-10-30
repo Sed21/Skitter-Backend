@@ -41,3 +41,19 @@ export type JWTPayload = {
   token: Token,
   token_expr_date: Date;
 }
+
+export type UserData = {
+  id: UUID;
+  username: Username,
+  role: AllRoles,
+  profile_description: String,
+  signup_date: Date
+}
+
+export type UserChanges = {
+  profile_description: String
+}
+
+export type ExportedUser = UserData & {
+  last_signin: Date
+}

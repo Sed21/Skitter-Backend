@@ -12,7 +12,8 @@ CREATE TABLE "skitter".users (
     role ROLES NOT NULL DEFAULT 'Listener',
     token char(172),
     token_gen_date timestamptz,
-    token_expr_date timestamptz
+    token_expr_date timestamptz,
+    profile_description text
 );
 
 CREATE UNIQUE INDEX username_idx ON "skitter".users (username);
@@ -34,20 +35,18 @@ CREATE TABLE "skitter".content (
 -- CREATE UNIQUE INDEX book_title_idx ON "skitter".content (book_title);
 -- CREATE UNIQUE INDEX book_author_idx ON "skitter".content (book_author);
 
--- CREATE TABLE "skitter".reviews (
---     review_id uuid PRIMARY KEY,
---     review_grade float default 0.0 NOT NULL,
---     CONSTRAINT fk_review_user
---         FOREIGN KEY (review_id)
---            REFERENCES users(id)
---            ON DELETE NO ACTION
---
--- );
---
--- CREATE TABLE "skitter".favorites (
---
--- );
---
--- CREATE TABLE "skitter".admin (
---
--- );
+CREATE TABLE "skitter".reviews (
+    review_id uuid PRIMARY KEY,
+    review_mark float default 0.0 NOT NULL,
+    review_date timestamptz NOT NULL DEFAULT NOW(),
+    content_id uuid NOT NULL,
+    user_id uuid NOT NULL
+);
+
+
+CREATE TABLE "skitter".favorites (
+    favorite_id uuid PRIMARY KEY,
+    content_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    add_date timestamptz NOT NULL DEFAULT NOW()
+);
