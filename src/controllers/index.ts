@@ -15,6 +15,10 @@ export * from './failure';
 export * from './review/add';
 export * from './review/delete';
 
+export * from './favorite/add';
+export * from './favorite/view';
+export * from './favorite/delete';
+
 export async function rootHandler(req: Request, res: Response): Promise<Response> {
   return res.json({
     message:
