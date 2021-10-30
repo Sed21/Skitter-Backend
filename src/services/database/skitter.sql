@@ -12,7 +12,8 @@ CREATE TABLE "skitter".users (
     role ROLES NOT NULL DEFAULT 'Listener',
     token char(172),
     token_gen_date timestamptz,
-    token_expr_date timestamptz
+    token_expr_date timestamptz,
+    profile_description text
 );
 
 CREATE UNIQUE INDEX username_idx ON "skitter".users (username);

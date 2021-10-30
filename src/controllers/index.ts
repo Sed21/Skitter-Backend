@@ -19,6 +19,10 @@ export * from './favorite/add';
 export * from './favorite/view';
 export * from './favorite/delete';
 
+export * from './user/change';
+export * from './user/view';
+export * from './user/delete';
+
 export async function rootHandler(req: Request, res: Response): Promise<Response> {
   return res.json({
     message:
