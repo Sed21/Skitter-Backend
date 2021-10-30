@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { String } from '../types';
 
 export class Failure {
@@ -30,4 +30,8 @@ export class Failure {
       }.`
     });
   }
+}
+
+export async function notFoundHandler(req: Request, res: Response): Promise<Response> {
+  return Failure.notFound(res);
 }
