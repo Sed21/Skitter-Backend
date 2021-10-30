@@ -12,7 +12,6 @@ export async function deleteReviewHandler(req: Request, res: Response): Promise<
 
   try {
     const response = await Review.deleteReview(contentId, token);
-    console.log(response);
     if(response) return Success.NoContent(res);
     else return Failure.badRequest(res,'Invalid content id specified. Review might not exists');
   } catch(e) {

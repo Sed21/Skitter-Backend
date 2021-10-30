@@ -157,21 +157,27 @@ export class User {
     return response.rows[0] as UserData;
   }
 
-  public static async delete(token: Token): Promise<Boolean> {
-    const [userId] = await Promise.all([User.getOne(undefined, undefined, token)]);
+  public static async delete(token: Token, user_id?: UUID): Promise<Boolean> {
+    let userId = !user_id ? (await User.getOne(undefined, undefined, token))?.id : user_id;
     if(!userId) return false;
 
-    const userContent = await Content.getMany(userId.id);
+    const userContent = await Content.getMany(userId);
 
-    const queryUser = `DELETE FROM "${Database.schemaName}".users WHERE token=$1 RETURNING true;`;
+    let queryUser: string;
+    if(user_id) {
+      queryUser = `DELETE FROM "${Database.schemaName}".users WHERE id=$1 RETURNING true;`;
+    } else {
+      queryUser = `DELETE FROM "${Database.schemaName}".users WHERE token=$1 RETURNING true;`;
+    }
+
     const queryContent = `DELETE FROM "${Database.schemaName}".content WHERE creator_id=$1 RETURNING true;`;
     const queryReview = `DELETE FROM "${Database.schemaName}".reviews WHERE user_id=$1 RETURNING true;`;
     const queryFavorite = `DELETE FROM "${Database.schemaName}".favorites WHERE user_id=$1 RETURNING true;`;
 
-    const responseUser = await Database.query(queryUser, [token]);
-    await Database.query(queryContent, [userId.id]);
-    await Database.query(queryReview, [userId.id]);
-    await Database.query(queryFavorite, [userId.id]);
+    const responseUser = await Database.query(queryUser, [user_id ? user_id : token]);
+    await Database.query(queryContent, [userId]);
+    await Database.query(queryReview, [userId]);
+    await Database.query(queryFavorite, [userId]);
 
     userContent.forEach(_ => {
       fs.unlink(`${readEnv().savePath}/${_.content_id}.mp3`, () => {});

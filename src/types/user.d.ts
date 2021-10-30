@@ -53,3 +53,7 @@ export type UserData = {
 export type UserChanges = {
   profile_description: String
 }
+
+export type ExportedUser = UserData & {
+  last_signin: Date
+}

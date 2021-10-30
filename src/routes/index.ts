@@ -6,6 +6,7 @@ import { contentRouter } from './content';
 import { reviewRouter } from './review';
 import { favoriteRouter } from './favorite';
 import { userRouter } from './user';
+import { adminRouter } from './admin';
 
 export const Routes = Router();
 
@@ -16,5 +17,6 @@ Routes.use('/api/content', contentRouter);
 Routes.use('/api/review', reviewRouter);
 Routes.use('/api/favorite', favoriteRouter);
 Routes.use('/api/user', userRouter);
+Routes.use('/api/admin', adminRouter);
 
 Routes.all('*', notFoundHandler);
