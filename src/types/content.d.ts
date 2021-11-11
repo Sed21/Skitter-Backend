@@ -12,6 +12,7 @@ export type ViewOptions = {
   book_author: String,
   book_title: String,
   creator_id: UUID,
+  content_id: UUID,
   limit: Number
 }
 

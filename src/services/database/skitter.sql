@@ -16,10 +16,6 @@ CREATE TABLE "skitter".users (
     profile_description text
 );
 
-CREATE UNIQUE INDEX username_idx ON "skitter".users (username);
-CREATE UNIQUE INDEX token_idx ON "skitter".users (token);
-CREATE UNIQUE INDEX id_idx ON "skitter".users (id);
-
 CREATE TABLE "skitter".content (
     content_id uuid PRIMARY KEY,
     book_title varchar(128) NOT NULL,
