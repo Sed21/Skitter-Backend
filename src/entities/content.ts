@@ -23,12 +23,17 @@ export class Content {
     this.mime_type = mimetype;
   }
   
-  public static async getMany(creatorId?: UUID, bookTitle?: String, bookAuthor?: String): Promise<ExportedContent[]> {
+  public static async getMany(contentId?:UUID, creatorId?: UUID, bookTitle?: String, bookAuthor?: String): Promise<ExportedContent[]> {
     let query = `SELECT content_id, book_title, book_author, review, description, upload_date, creator_id, username FROM "${Database.schemaName}".content INNER JOIN ${Database.schemaName}.users ON (creator_id = users.id) `;
     let args = Array();
     let argN: Number= 1;
+    if(contentId){
+      query = `${query} WHERE content_id=$${argN++} `;
+      args.push(contentId);
+    }
+
     if(creatorId){
-      query = `${query} WHERE creator_id=$${argN++} `;
+      query = `${query} ${contentId ? ` AND creator_id=$${argN++} ` : ` WHERE creator_id=$${argN++} `}`;
       args.push(creatorId);
     }
     if(bookTitle){

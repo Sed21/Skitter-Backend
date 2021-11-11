@@ -10,6 +10,7 @@ export async function viewHandler(req: Request, res: Response): Promise<Response
     book_author: '',
     book_title: '',
     creator_id: '',
+    content_id: '',
     limit: 0
   };
 
@@ -23,7 +24,7 @@ export async function viewHandler(req: Request, res: Response): Promise<Response
   if(filters.limit && (filters.limit <= 0 || filters.limit > 1000)) return Failure.badRequest(res, 'Invalid limit values provided');
 
   try {
-    const content = await Content.getMany(filters.creator_id, filters.book_title, filters.book_author);
+    const content = await Content.getMany(filters.content_id, filters.creator_id, filters.book_title, filters.book_author);
     return Success.Ok(res, {
       found: filters.limit ? filters.limit : content.length,
       content: filters.limit ? content.slice(0, filters.limit) : content
