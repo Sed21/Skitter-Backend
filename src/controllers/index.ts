@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 export * from './auth/signup';
 export * from './auth/signin';
 export * from './auth/signout';
+export * from './auth/check';
 
 export * from './content/view';
 export * from './content/upload';

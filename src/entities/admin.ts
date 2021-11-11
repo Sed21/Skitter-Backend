@@ -4,7 +4,7 @@ import { User } from './user';
 
 export class Admin {
   static async viewUsers(): Promise<ExportedUser[]>{
-    const query = `SELECT id, username, signup_date, profile_description, token_gen_date FROM "${Database.schemaName}".users;`;
+    const query = `SELECT id, username, role, signup_date, profile_description, token_gen_date FROM "${Database.schemaName}".users;`;
     const response = await Database.query(query);
     return response.rows.map(_ => {
       return {

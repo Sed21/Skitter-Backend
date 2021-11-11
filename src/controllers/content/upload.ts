@@ -21,13 +21,10 @@ export async function uploadHandler(req: Request, res: Response): Promise<Respon
 
   try {
     const contentInfo: ContentInfo = req.body;
-    contentInfo.book_title = 'yes';
-    contentInfo.book_author = 'yes';
-    contentInfo.description = 'yes';
 
-    // if(!(contentInfo.book_author &&
-    //      contentInfo.book_title &&
-    //      contentInfo.description)) return Failure.badRequest(res, 'Recording details are mandatory');
+    if(!(contentInfo.book_author &&
+         contentInfo.book_title &&
+         contentInfo.description)) return Failure.badRequest(res, 'Recording details are mandatory');
     const user = await User.getOne(undefined,undefined, await TokenBearer(req));
     if(user){
       const content: Promise<Content>[] = await Object.values(files).map(async f => {
