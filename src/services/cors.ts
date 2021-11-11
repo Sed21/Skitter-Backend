@@ -6,7 +6,8 @@ export const corsOptions: cors.CorsOptions = {
     'X-Requested-With',
     'Content-Type',
     'Accept',
-    'X-AUTH-TOKEN'
+    'X-AUTH-TOKEN',
+    'Authorization'
   ],
   methods: [
     'GET',

@@ -4,7 +4,8 @@ import { UUID } from './uuid';
 export type ContentInfo = {
   book_title: String,
   book_author: String,
-  description: String
+  description: String,
+  file_bytes: String
 }
 
 export type ViewOptions = {

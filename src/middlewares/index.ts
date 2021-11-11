@@ -6,7 +6,7 @@ import { User } from '../entities';
 
 export function requireRole(...roles: AllRoles[]) {
   return (req: Request, res: Response, next: Next): Response | Void => {
-    const token = String(req.header('X-SESSION-TOKEN'));
+    const token = String(req.header('Authorization'));
     try {
       const payload = JWT.verify(token);
       if(payload.token_expr_date < new Date()) {
